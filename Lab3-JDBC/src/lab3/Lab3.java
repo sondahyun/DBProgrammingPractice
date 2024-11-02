@@ -48,7 +48,12 @@ public class Lab3 {
         
         try {
         	pStmt = conn.prepareStatement(query.toString());
+        	pStmt.setString(1, deptName);
+        	rs = pStmt.executeQuery();
         	
+        	if (rs.next()) {
+        		int deptno = rs.getInt("depno");
+        	}
         	
         } catch(SQLException ex) {
         	
