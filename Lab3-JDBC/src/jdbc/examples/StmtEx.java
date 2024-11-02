@@ -8,6 +8,7 @@ public class StmtEx {
 		Statement stmt = null;
 		ResultSet rs = null;
 		
+		// 학과 서버 
 		String url = "jdbc:oracle:thin:@dblab.dongduk.ac.kr:1521/orclpdb";        
         // String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
         String user = "dbp2024";

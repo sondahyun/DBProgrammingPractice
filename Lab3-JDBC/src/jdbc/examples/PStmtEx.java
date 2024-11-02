@@ -37,7 +37,7 @@ public class PStmtEx {
 		Statement stmt = null;
 		ResultSet rs = null;	
 		
-		String pattern = "%" + keyword + "%";
+		String pattern = "%" + keyword + "%"; //
 
 		String query1 = "SELECT ename, job, dname "
 				+ "FROM emp JOIN dept USING (deptno) "
@@ -80,7 +80,7 @@ public class PStmtEx {
 		Statement stmt = null;
 		ResultSet rs = null;	
 		
-		String pattern = "%" + keyword + "%";
+		String pattern = "%" + keyword + "%"; // like 연산자로 pattern 나타냄 
 
 		String query2 = "SELECT ename, job, dname "
 			  	+ "FROM emp JOIN dept USING (deptno) "
@@ -131,7 +131,7 @@ public class PStmtEx {
 
 		// String concatenation(+)보다 StringBuffer나 StringBuilder 사용이 바람직함
 		StringBuffer query3 = new StringBuffer();
-		query3.append("SELECT ename, job, dname ");
+		query3.append("SELECT ename, job, dname "); // 맨 뒤에 공백이 있어야함 
 		query3.append("FROM emp JOIN dept USING (deptno) ");
 		query3.append("WHERE ename like ?");		// parameter가 포함된 SQL 질의 정의
 					
