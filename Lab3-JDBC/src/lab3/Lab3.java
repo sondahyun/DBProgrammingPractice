@@ -2,6 +2,8 @@ package lab3;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -33,9 +35,26 @@ public class Lab3 {
     
     public static void printDeptInfo(String deptName) throws DeptNotFoundException {
         Connection conn = null;
+        PreparedStatement pStmt = null;
+        ResultSet rs = null;
         
         conn = getConnection();
         
+        StringBuffer query = new StringBuffer();
+        query.append("SELECT deptno, manager, COUNT(empno) AS numOfEmps ");
+        query.append("FROM EMP0000 JOIN DEPT0000 USING (deptno) ");
+        query.append("WHERE dname = ? ");
+        query.append("GROUP BY deptno, manager\r\n");
+        
+        try {
+        	pStmt = conn.prepareStatement(query.toString());
+        	
+        	
+        } catch(SQLException ex) {
+        	
+        } finally {
+        	
+        }
     }
     
     public static void printAllEmpsInDept(String deptName) {
@@ -86,8 +105,10 @@ public class Lab3 {
      
         try {
             // 입력된 부서명 이용 printDeptInfo 호출
+        	printDeptInfo(deptName);
             
             // 입력된 부서명 이용 printAllEmpsInDept 호출
+        	printAllEmpsInDept(deptName);
     
             System.out.print("새 관리자 사번과 보직수당을 입력하시오: ");
             int managerNo  = scanner.nextInt();
