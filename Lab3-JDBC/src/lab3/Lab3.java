@@ -47,7 +47,7 @@ public class Lab3 {
         query.append("SELECT deptno, dname, manager, COUNT(empno) AS numOfEmps ");
         query.append("FROM EMP0979 JOIN DEPT0979 USING (deptno) ");
         query.append("WHERE dname = ? ");
-        query.append("GROUP BY deptno, dname, manager ");
+        query.append("GROUP BY deptno, manager ");
         
         try {
             pStmt = conn.prepareStatement(query.toString());
