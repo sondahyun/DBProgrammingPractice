@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-public class JDBCUtil {
+public class JDBCUtil { // JDBC Api의 간결화 
 	private String sql = null; // 실행할 query
 	private Object[] parameters = null;; // PreparedStatement 의 매개변수 값을 저장하는 배열
 	private static DataSource ds = null; // DBCP DataSource
@@ -39,7 +39,8 @@ public class JDBCUtil {
 	private static void initJDBCUtil() {		
 		try {
 			if (ds == null) { // DBCP 설정
-				BasicDataSource bds = new BasicDataSource();
+				// DataSource 생성 (Connection 생성 가능) 
+				BasicDataSource bds = new BasicDataSource(); 
 				bds.setDriverClassName(prop.getProperty("db.driver"));
 		        bds.setUrl(prop.getProperty("db.url"));
 		        bds.setUsername(prop.getProperty("db.username"));

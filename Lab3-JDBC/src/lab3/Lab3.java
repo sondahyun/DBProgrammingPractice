@@ -67,9 +67,9 @@ public class Lab3 {
                 System.out.println("소속 사원수: " + numOfEmps);
             }
             System.out.println();
-            
+            	throw new DeptNotFoundException(deptName+"은 존재하지 않는 부서입니다.");
         } catch(SQLException ex) {
-            
+        	ex.printStackTrace();
         } finally {
             if (rs != null) {
                 try { 
@@ -122,7 +122,7 @@ public class Lab3 {
             System.out.println();
             
         } catch(SQLException ex) {
-            
+        	ex.printStackTrace();
         } finally {
             if (rs != null) {
                 try { 
@@ -168,8 +168,6 @@ public class Lab3 {
                 oldMgrNo = rs.getInt("manager");
                 // System.out.println("기존 관리자 사번: " + oldMgrNo);
             }
-     
-            rs.close(); 
                 
             pStmt.close(); 
                 
@@ -185,8 +183,6 @@ public class Lab3 {
             
             pStmt.executeUpdate();
        
-            rs.close(); 
-            
             pStmt.close(); 
             
             
@@ -201,11 +197,7 @@ public class Lab3 {
             pStmt.setInt(2, newMgrNo);
             
             pStmt.executeUpdate();
-            
-            rs.close(); 
-            
-            pStmt.close(); 
-        
+                    
             
             // 부서의 관리자 변경 (UPDATE문 실행)
             StringBuffer update3 = new StringBuffer();
