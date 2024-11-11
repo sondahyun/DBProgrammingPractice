@@ -13,7 +13,7 @@ public class Department {
 		this.deptNo = deptNo;
 		this.deptName = deptName;
 		this.mgrNo = mgrNo;
-		this.numOfEmps = numOfEmps;
+		this.numOfEmps = numOfEmps; // 테이블에 없는 정보도 추가 가능 
 	}
 	
 	// getters & setters	
