@@ -122,34 +122,34 @@ public class CompanyDao {
     	 */    	
     	// (부서번호, 새 관리자 번호, 새관리자 수당) 
         // String query1 = "SELECT manager FROM DEPT0979 WHERE deptNo = ?";
-        StringBuffer query1 = new StringBuffer();
-        query1.append("SELECT manager FROM DEPT0979 WHERE deptno = ?");
-    	jdbcUtil.setSqlAndParameters(query1.toString(), new Object[]{appo.getDeptNo()});	// JDBCUtil에 질의문과 파라미터 설정	
-    	int oldMgrNo = 0;
-    	try {
+        try {
+            // 기존 부서 관리자 사번 조회 
+            StringBuffer query1 = new StringBuffer();
+            query1.append("SELECT manager FROM DEPT0979 WHERE deptno = ?");
+        	jdbcUtil.setSqlAndParameters(query1.toString(), new Object[]{appo.getDeptNo()});	// JDBCUtil에 질의문과 파라미터 설정	
+        	int oldMgrNo = 0;
+        	
     		ResultSet rs = jdbcUtil.executeQuery();
     		if(rs.next()) {
     			oldMgrNo = rs.getInt("manager"); // 기존 관리자 사번 
     		} else {
     			throw new SQLException("No Manager");
     		}
-    	} catch (Exception ex) {
-        	ex.printStackTrace();
-    	} finally {
-            jdbcUtil.close();
-    	}
+    			
+    			
+    		// 기존 관리자의 정보 
+            StringBuffer query2 = new StringBuffer();
+            query2.append("SELECT empno, ename, job, hiredate, sal, comm, deptNo ");
+            query2.append("FROM EMP0979 ");
+            query2.append("WHERE empno = ? ");
+        	jdbcUtil.setSqlAndParameters(query2.toString(), new Object[]{oldMgrNo});	// JDBCUtil에 질의문과 파라미터 설정	
+            
+        	ResultSet rs1 = null;
+        	
+        	Employee emp = new Employee();
     	
-    	 // 기존 관리자의 정보 
-        StringBuffer query2 = new StringBuffer();
-        query2.append("SELECT empno, ename, job, hiredate, sal, comm, deptNo ");
-        query2.append("FROM EMP0979 ");
-        query2.append("WHERE empno = ? ");
-    	jdbcUtil.setSqlAndParameters(query2.toString(), new Object[]{oldMgrNo});	// JDBCUtil에 질의문과 파라미터 설정	
-        
-    	ResultSet rs1 = null;
-    	Employee emp = new Employee();
-    	try {
     		rs1 = jdbcUtil.executeQuery(); 
+    		
     		if(rs1.next()) {
 	    		emp.setEmpNo(rs1.getInt("empno"));
 	    		emp.seteName(rs1.getString("ename"));
@@ -159,38 +159,41 @@ public class CompanyDao {
 	    		emp.setComm(rs1.getDouble("comm"));
 	    		emp.setDeptNo(rs1.getInt("deptNo"));
 	  		}
-    	} catch (Exception ex) {
-        	ex.printStackTrace();
-    	} finally {
-            jdbcUtil.close();
-    	}
+    	
+    		
+    		
+        	// 기존 관리자의 (M) 없애기 
+        	StringBuffer update1 = new StringBuffer();
+            update1.append("UPDATE EMP0979 ");
+            update1.append("SET ename = TRIM(REPLACE(ename, '(M)', '')) "); //   
+            update1.append("WHERE empno = ? ");              
+        	jdbcUtil.setSqlAndParameters(update1.toString(), new Object[]{oldMgrNo});	// JDBCUtil에 질의문과 파라미터 설정	
+        	
+        	jdbcUtil.executeUpdate();
     	
     	
-    	// 기존 관리자의 (M) 없애기 
-    	StringBuffer update1 = new StringBuffer();
-        update1.append("UPDATE EMP0979 ");
-        update1.append("SET ename = TRIM(REPLACE(ename, '(M)', '')) "); //   
-        update1.append("WHERE empno = ? ");              
-    	jdbcUtil.setSqlAndParameters(update1.toString(), new Object[]{oldMgrNo});	// JDBCUtil에 질의문과 파라미터 설정	
-    	try {
-    		jdbcUtil.executeUpdate();
-    	} catch (Exception ex) {
-        	ex.printStackTrace();
-    	} finally {
-    	    jdbcUtil.commit();
-            jdbcUtil.close();
-    	}
-    	
-    	// 새로운 관리에 수당 더하고 관리자로 지정 
-        StringBuffer update2 = new StringBuffer();
-        update2.append("UPDATE EMP0979 ");
-        update2.append("SET ename = ename || '(M)', comm = NVL(comm, 0) + ? ");
-        update2.append("WHERE empno = ? ");
-        Object[] param = new Object[] {appo.getNewComm(), appo.getNewManagerNo()};
-    	jdbcUtil.setSqlAndParameters(update2.toString(), param);	// JDBCUtil에 질의문과 파라미터 설정	
-        
-        try {
+        	
+        	// 새로운 관리에 수당 더하고 관리자로 지정 
+            StringBuffer update2 = new StringBuffer();
+            update2.append("UPDATE EMP0979 ");
+            update2.append("SET ename = ename || '(M)', comm = NVL(comm, 0) + ? ");
+            update2.append("WHERE empno = ? ");
+            Object[] param = new Object[] {appo.getNewComm(), appo.getNewManagerNo()};
+        	jdbcUtil.setSqlAndParameters(update2.toString(), param);	// JDBCUtil에 질의문과 파라미터 설정	
+            
     		jdbcUtil.executeUpdate();        	 
+        
+    		
+        
+            // 관리자 변경  
+            String update3 = "UPDATE DEPT0979 SET manager = ? WHERE deptNo = ?"; 
+            Object[] param1 = new Object[] {appo.getNewManagerNo(), appo.getDeptNo()};
+            jdbcUtil.setSqlAndParameters(update3.toString(), param1);	// JDBCUtil에 질의문과 파라미터 설정	
+            
+    		jdbcUtil.executeUpdate(); 
+    		
+    		return emp;
+    		
         } catch (Exception ex) {
         	jdbcUtil.rollback();	// 트랜잭션 rollback 실행
         	ex.printStackTrace();
@@ -199,24 +202,9 @@ public class CompanyDao {
             jdbcUtil.close();
         }
         
-        // 관리자 변경  
-        String update3 = "UPDATE DEPT0979 SET manager = ? WHERE deptNo = ?"; 
-        Object[] param1 = new Object[] {appo.getNewManagerNo(), appo.getDeptNo()};
-        jdbcUtil.setSqlAndParameters(update3.toString(), param1);	// JDBCUtil에 질의문과 파라미터 설정	
-        
-        try {
-    		jdbcUtil.executeUpdate();        	 
-        } catch (Exception ex) {
-        	jdbcUtil.rollback();	// 트랜잭션 rollback 실행
-        	ex.printStackTrace();
-        } finally {
-            jdbcUtil.commit();		// 트랜잭션 commit 실행
-            jdbcUtil.close();
-        }
-        
-    	
-       return emp;
-    }
+        return null;
+}
+    
     
     public Employee findEmpInfo(int empNo) {
     	/* 실습 #3의 printEmpInfo()를 변형
