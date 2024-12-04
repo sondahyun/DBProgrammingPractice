@@ -1,18 +1,24 @@
 package lab5;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Employee {      
-    private int empNo;
+public class Employee implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int empNo;
 	private String empName;
 	private String job;
 	private LocalDate hiredate;
 	private double sal;
 	private double comm;
 	private String deptName;
-	
-	public Employee() { }
-	
+
+	public Employee() {
+	}
+
 	public Employee(int empNo, String empName, String job, LocalDate hiredate, double sal, double comm,
 			String deptName) {
 		super();
@@ -81,9 +87,9 @@ public class Employee {
 		this.deptName = deptName;
 	}
 
-    @Override
-    public String toString() {
-        return "Employee [empNo=" + empNo + ", empName=" + empName + ", job=" + job + ", hiredate=" + hiredate
-                + ", sal=" + sal + ", comm=" + comm + ", deptName=" + deptName + "]";
-    }
+	@Override
+	public String toString() {
+		return "Employee [empNo=" + empNo + ", empName=" + empName + ", job=" + job + ", hiredate=" + hiredate
+				+ ", sal=" + sal + ", comm=" + comm + ", deptName=" + deptName + "]";
+	}
 }

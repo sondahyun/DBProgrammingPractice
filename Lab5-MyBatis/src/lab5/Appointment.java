@@ -1,10 +1,20 @@
 package lab5;
 
-public class Appointment {
+import java.io.Serializable;
+
+public class Appointment implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int deptNo;
 	private int mgrNo;
 	private double comm;
-	
+
+	public Appointment() {
+
+	}
+
 	public Appointment(int deptNo, int mgrNo, double comm) {
 		super();
 		this.deptNo = deptNo;
