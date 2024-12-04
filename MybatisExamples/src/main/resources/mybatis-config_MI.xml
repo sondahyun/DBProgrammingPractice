@@ -22,6 +22,7 @@
 			</dataSource>
 		</environment>
 	</environments>
+	<!-- interface 사용  -->
 	<mappers>
 		<mapper class="repository.mybatis.mapper.CommentMapper2" />
 	</mappers>

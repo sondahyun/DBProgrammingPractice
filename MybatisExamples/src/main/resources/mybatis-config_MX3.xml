@@ -22,6 +22,7 @@
 			</dataSource>
 		</environment>
 	</environments>
+	<!-- interface는 xml과 일치한다고 판단, 안적어도됨  -->
 	<mappers>
 		<mapper resource="repository/mybatis/mapper/CommentMapper3.xml" />
 	</mappers>

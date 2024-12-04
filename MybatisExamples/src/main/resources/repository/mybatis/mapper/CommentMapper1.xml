@@ -4,6 +4,7 @@
 <mapper namespace="repository.mybatis.mapper.CommentMapper1">
 	<cache />
 
+	<!-- sql문 일부분  -->
 	<sql id="BaseColumns">
 		comment_no AS commentNo,
 		user_id AS userId,
